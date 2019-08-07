@@ -3,7 +3,8 @@ import {Redirect} from 'react-router-dom';
 import { Button } from 'reactstrap'
 import EditPostForm from './EditPostForm';
 import CommentForm from './CommentForm';
-import CommentList from './CommentList'
+import Comment from './Comment'
+import uuid from 'uuid/v4'
 //import './PostDetails.css'
 
 class PostDetails extends Component {
@@ -11,11 +12,12 @@ class PostDetails extends Component {
     super(props);
     this.state = {
       isEditForm: false,
-      comments: []
+      comments: {}
     }
     this.toggleEditForm = this.toggleEditForm.bind(this)
     this.handleDelete = this.handleDelete.bind(this)
     this.addComment = this.addComment.bind(this)
+    this.deleteComment = this.deleteComment.bind(this)
   }
 
   toggleEditForm() {
@@ -28,17 +30,27 @@ class PostDetails extends Component {
     this.props.deletePost(id);
   }
   addComment(comment) {
+    const id = uuid()
     this.setState(st => ({
-      comments: [...st.comments, comment]
+      comments: {...st.comments, [id]: comment}
     }))
+  }
+  deleteComment(id){
+    this.setState(st => {
+      const copyComments = st.comments
+      delete copyComments[id]
+      return {comments: copyComments}
+    })
   }
   render() {
     console.log("comments: ", this.state.comments)
+    const { comments }  = this.state
     const id = this.props.match.params.id;
     const post = this.props.posts[id]
     if(!post){
       return <Redirect to="/"></Redirect>
     }
+
     return (
       <div className="PostDetails">
         {this.state.isEditForm ? <EditPostForm updateBlogPost={this.props.updateBlogPost} toggleEditForm={this.toggleEditForm} {...post} id={id}/>:
@@ -50,7 +62,7 @@ class PostDetails extends Component {
             <Button onClick={this.toggleEditForm}>Edit</Button>
             <Button onClick={this.handleDelete}>Delete</Button>
           </div>
-          <CommentList comments={this.state.comments}/>
+          {Object.keys(comments).map(key => <Comment comment={comments[key]} id={key} key={key} deleteComment={this.deleteComment} />)}
           <CommentForm  addComment={this.addComment}/>
           
         </div> 
