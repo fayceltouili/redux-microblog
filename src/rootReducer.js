@@ -3,18 +3,9 @@ import { ADD_POST,
   UPDATE_POST,
   ADD_COMMENT,
   REMOVE_COMMENT,
-  UPDATE_COMMENT} from "./actionTypes";
-const INITIAL_STATE = {
-	posts: {
-    test: {
-      title: 'test',
-      description: 'test',
-      body: 'ttettest',
-      comments: ['1234']
-    }
-  },
-	comments: {'1234': {text: 'test', postId: 'test'}},
-}
+  UPDATE_COMMENT,
+  LOAD_POSTS} from "./actionTypes";
+const INITIAL_STATE = { posts: {}, comments: {} }
 
 function rootReducer(state = INITIAL_STATE, action) {
 	switch (action.type) {
@@ -29,8 +20,9 @@ function rootReducer(state = INITIAL_STATE, action) {
       const postId = action.postId
       const postsCopy = {...state.posts};
       const commentsCopy = {...state.comments}
-      for(let key of postsCopy[postId].comments) {
-        delete commentsCopy[key]
+      console.log(postsCopy, commentsCopy)
+      for(let commentKey of postsCopy[postId].comments) {
+        delete commentsCopy[commentKey]
       }
       delete postsCopy[action.postId]
 			return {
@@ -55,37 +47,44 @@ function rootReducer(state = INITIAL_STATE, action) {
     }
     
     case ADD_COMMENT: {
-      console.log('ADD_COMMENT')
+      // console.log('ADD_COMMENT')
       const postId = action.comment.postId
       const postOfComment = state.posts[postId]
       return {
         ...state,
         comments: {
           ...state.comments, 
-          [action.id]: action.comment
+          [action.commentId]: action.comment
         },
         posts: {
           ...state.posts, 
           [postId]: {
             ...postOfComment,
-            comments: [...postOfComment.comments, action.id]
+            comments: [...postOfComment.comments, action.commentId]
           }
         }
       }
     }
 
     case REMOVE_COMMENT: {
-      const postCopy = {...state.posts};
+      console.log('DELETE_COMMENT')
+      // const post = postCopy[postId];
+      // post.comments = post.comments.filter(id => {
+      //   return id !== action.commentId
+      // })
       const commentsCopy = {...state.comments}
       const postId = commentsCopy[action.commentId].postId
-      const post = postCopy[postId];
-      let commentsOfPost = post.comments;
-      commentsOfPost = commentsOfPost.filter(id => id != action.commentId)
       delete commentsCopy[action.commentId]
 
       return {
         ...state,
-        posts: postCopy,
+        posts: {
+          ...state.posts,
+          [postId]: {
+            ...state.posts[postId],
+            comments: [...state.posts[postId].comments.filter(id => id !==action.commentId)]
+          }
+        },
         comments: commentsCopy
 			}
     }
@@ -95,6 +94,12 @@ function rootReducer(state = INITIAL_STATE, action) {
         ...state
 			}
     }
+    case LOAD_POSTS:{
+      return{
+        ...state,
+        posts: action.posts
+      }
+    }
 		default:
 			return state;
 	}
@@ -102,3 +107,23 @@ function rootReducer(state = INITIAL_STATE, action) {
 }
 
 export default rootReducer;
+
+
+
+
+// const INITIAL_STATE = {
+// 	posts: {
+//     test: {
+//       title: 'test',
+//       description: 'test',
+//       body: 'ttettest',
+//       comments: ['1234']
+//     }
+//   },
+// 	comments: {
+//     '1234': {
+//       text: 'test',
+//        postId: 'test'
+//       }
+//   }
+// }

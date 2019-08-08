@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux'
 import { removeComment } from './actions'
-import {Redirect} from 'react-router-dom';
 //import './Comment.css'
 
 class Comment extends Component {
@@ -15,11 +14,9 @@ class Comment extends Component {
   }
 
   render() {
-    console.log('comment props: ', this.props.comment)
-    if(this.props.comment)
     return (
       <div className="Comment">
-        <i class="fas fa-times d-inline p-2 m-1 left PostIcon PostDelete"
+        <i className="fas fa-times d-inline p-2 m-1 left PostIcon PostDelete"
           onClick={this.delete} />
         <p className="d-inline p-2 m-1">{this.props.comment.text}</p>
 

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { Col, Button, Form, FormGroup, Label, Input} from 'reactstrap';
+import { Col, Button, Form, FormGroup, Input} from 'reactstrap';
 import uuid from 'uuid/v4'
 
 //import './CommentForm.css'
@@ -39,7 +39,7 @@ class CommentForm extends Component {
           <Input 
             onChange={this.handleChange} 
             value={this.state.comment} 
-            rows="5"
+            rows="3"
             type="textarea" 
             name="comment" 
             id="comment" 

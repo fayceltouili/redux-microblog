@@ -3,7 +3,12 @@ import { ADD_POST,
          UPDATE_POST,
          ADD_COMMENT,
          REMOVE_COMMENT,
-         UPDATE_COMMENT} from "./actionTypes";
+         UPDATE_COMMENT,
+         LOAD_POSTS }
+          from "./actionTypes";
+import axios from 'axios';
+
+const BASE_URL= 'http://localhost:5000';
 
 export function addPost(post) {
   return {
@@ -27,12 +32,21 @@ export function updatePost(postId, updatedPost) {
   };
 }
 
-export function addComment(comment, id) {
+/**
+ *  comment looks like 
+ *  {
+ *  text: 'text'
+ *  postId: 'test-title'
+ * }
+ * commentId is a uuid
+ */
+
+export function addComment(comment, commentId) {
 
   return {
     type: ADD_COMMENT,
     comment,
-    id
+    commentId
   };
 }
 
@@ -51,5 +65,24 @@ export function updateComment(id, updatedComment) {
   };
 }
 
+
+export function getPostsFromAPI() {
+  return async function(dispatch) {
+    let res = await axios.get(`${BASE_URL}/api/posts/`);
+    console.log('res..',res.data)
+    let posts = {}
+    for (let post of res.data) {
+      posts[post.id] = post
+      delete post.id
+    }
+    dispatch(getPosts(posts));
+  };
+}
+
+// normal action creator & action
+
+function getPosts(posts) {
+  return { type: LOAD_POSTS, posts };
+}
 
 

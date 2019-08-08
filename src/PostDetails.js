@@ -1,15 +1,12 @@
 import React, {Component} from 'react';
 import {Redirect} from 'react-router-dom';
-import { Col, Button, Form, FormGroup, Label, Input} from 'reactstrap';
 import EditPostForm from './EditPostForm';
 import CommentForm from './CommentForm';
 import Comment from './Comment'
-import uuid from 'uuid/v4'
-import { removePost, updatePost, addComment, removeComment } from './actions';
+import { removePost, updatePost, addComment } from './actions';
 import { connect } from 'react-redux';
 import './PostDetails.css'
 
-//import './PostDetails.css'
 
 class PostDetails extends Component {
   constructor(props) {
@@ -21,7 +18,6 @@ class PostDetails extends Component {
     this.handleDelete = this.handleDelete.bind(this)
     this.handleUpdate = this.handleUpdate.bind(this)
     this.addComment = this.addComment.bind(this)
-    this.deleteComment = this.deleteComment.bind(this)
   }
 
   toggleEditForm() {
@@ -38,13 +34,7 @@ class PostDetails extends Component {
     this.props.addComment(comment, commentId)
     
   }
-  deleteComment(id){
-    this.setState(st => {
-      const copyComments = st.comments
-      delete copyComments[id]
-      return {comments: copyComments}
-    })
-  }
+
   handleUpdate(updatePost){
     const id = this.props.match.params.id;
     this.props.updatePost(id,updatePost)
@@ -64,9 +54,9 @@ class PostDetails extends Component {
 
             <div>
             <h1 className="d-inline  left" >{post.title}</h1>
-              <i class="far fa-edit d-inline p-2 m-1 float-right PostIcon PostEdit" 
+              <i className="far fa-edit d-inline p-2 m-1 float-right PostIcon PostEdit" 
                 onClick={this.toggleEditForm} />
-              <i class="fas fa-times d-inline p-2 m-1 float-right PostIcon PostDelete"
+              <i className="fas fa-times d-inline p-2 m-1 float-right PostIcon PostDelete"
               onClick={this.handleDelete} />
             </div>
 
