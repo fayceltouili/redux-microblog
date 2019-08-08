@@ -32,19 +32,28 @@ class CommentForm extends Component {
 
   render() {
     return (
-      <div className="CommentForm">
-           <Form onSubmit={this.handleSubmit}> 
+      <div className="CommentForm" style={{marginTop: '30px'}}>
+      <Form onSubmit={this.handleSubmit}> 
         <FormGroup >
+        <Col sm={10}>
           <Input 
             onChange={this.handleChange} 
             value={this.state.comment} 
-            type="text" 
+            rows="5"
+            type="textarea" 
             name="comment" 
             id="comment" 
             placeholder="New Comment" 
           />
-          <Button disabled={!this.isFilledIn()}>Add</Button> 
-        </FormGroup>       
+          </Col>
+        </FormGroup>  
+        <Col align="right" sm={{ size: 10, offset: 0}}>
+          <Button
+          color="success"
+          disabled={!this.isFilledIn()}
+          >Add
+          </Button>
+        </Col>     
       </Form>
     </div>
     )
@@ -53,4 +62,3 @@ class CommentForm extends Component {
 
 export default CommentForm
 
-     

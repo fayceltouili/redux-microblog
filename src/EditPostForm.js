@@ -28,7 +28,7 @@ class EditPostForm extends Component {
       description: this.state.description,
       body: this.state.body
     }
-    this.props.updateBlogPost(newPost,this.props.id)
+    this.props.handleUpdate(newPost,this.props.id)
     this.setState({ title: '', description: '', body: ''})
     this.props.toggleEditForm()
 
@@ -37,38 +37,48 @@ class EditPostForm extends Component {
 
   render() {
     return (
-      <div className="EditPostForm">
+      <div className="EditPostForm container">
         <h2>Edit Post</h2>
            <Form onSubmit={this.handleSubmit}> 
         <FormGroup row>
-          <Label for="EditPost-title" sm={2}>Title</Label>
           <Col sm={10}>
-            <Input onChange={this.handleChange} value={this.state.title} type="text" name="title" id="EditPost-title"  />
+            <Label for="EditPost-title">Title:</Label>
+              <Input onChange={this.handleChange}
+                    value={this.state.title}
+                    type="text"
+                    name="title"
+                    id="EditPost-title"  />
           </Col>
         </FormGroup>
         <FormGroup row>
-          <Label for="EditPost-description" sm={2}>Description</Label>
-          <Col sm={10}>
-            <Input onChange={this.handleChange} value={this.state.description} type="text" name="description" id="EditPost-description" />
+          <Col sm={10} >
+            <Label for="EditPost-description">Description:</Label>
+            <Input onChange={this.handleChange}
+                    value={this.state.description}
+                    type="text" name="description"
+                    id="EditPost-description" />
           </Col>
         </FormGroup>
 
         <FormGroup row>
-          <Label for="EditPost-body" sm={2}>Body</Label>
           <Col sm={10}>
-            <Input onChange={this.handleChange} value={this.state.body} type="textarea" name="body" id="EditPost-body" />
+            <Label for="EditPost-body">Body:</Label>
+            <Input onChange={this.handleChange}
+                   value={this.state.body}
+                   type="textarea"
+                   name="body"
+                   id="EditPost-body" />
           </Col>
         </FormGroup>
 
         <FormGroup check row>
-          <Col sm={{ size: 10, offset: 2 }}>
-            <Button 
-            disabled={!this.isFilledIn()}
-            >Submit
-            </Button> 
-          </Col>
-          <Col sm={{ size: 10, offset: 2 }}>
-            <Button>Cancel</Button>
+        <Col align="right" sm={{ size: 10, offset: 0}}>
+          <Button
+          color="success"
+          disabled={!this.isFilledIn()}
+          >Submit
+          </Button> {' '}
+          <Button>Cancel</Button>
           </Col>
         </FormGroup>
       </Form>
@@ -77,6 +87,8 @@ class EditPostForm extends Component {
   }
 }
 
-export default EditPostForm
+
+
+export default EditPostForm;
 
      

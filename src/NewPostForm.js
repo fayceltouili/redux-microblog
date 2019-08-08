@@ -41,37 +41,45 @@ class NewPostForm extends Component {
 
   render() {
     return (
-      <div className="NewPostForm">
-        <h2>New Post</h2>
+      <div className="NewPostForm container">
+        <h2 color="blue">New Post</h2>
            <Form onSubmit={this.handleSubmit}> 
         <FormGroup row>
-          <Label for="NewPost-title" sm={2}>Title</Label>
-          <Col sm={10}>
-            <Input onChange={this.handleChange} value={this.state.title} type="text" name="title" id="NewPost-title"  />
+        <Col sm={10}>
+          <Label for="NewPost-title">Title:</Label>
+            <Input onChange={this.handleChange}
+                   value={this.state.title}
+                   type="text" name="title"
+                   id="NewPost-title"  />
           </Col>
         </FormGroup>
         <FormGroup row>
-          <Label for="NewPost-description" sm={2}>Description</Label>
           <Col sm={10}>
-            <Input onChange={this.handleChange} value={this.state.description} type="text" name="description" id="NewPost-description" />
+          <Label for="NewPost-description">Description:</Label>
+            <Input onChange={this.handleChange}
+                  value={this.state.description}
+                  type="text" name="description"
+                  id="NewPost-description" />
           </Col>
         </FormGroup>
-
         <FormGroup row>
-          <Label for="NewPost-body" sm={2}>Body</Label>
           <Col sm={10}>
-            <Input onChange={this.handleChange} value={this.state.body} type="textarea" name="body" id="NewPost-body" />
+            <Label for="NewPost-body">Body:</Label>
+              <Input onChange={this.handleChange}
+                    value={this.state.body}
+                    type="textarea"
+                    name="body"
+                    id="NewPost-body" />
           </Col>
         </FormGroup>
 
         <FormGroup check row>
-          <Col sm={{ size: 10, offset: 2 }}>
-            <Button 
+          <Col align="right" sm={{ size: 10, offset: 0}}>
+            <Button
+            color="success"
             disabled={!this.isFilledIn()}
             >Submit
-            </Button> 
-          </Col>
-          <Col sm={{ size: 10, offset: 2 }}>
+            </Button> {' '}
             <Button>Cancel</Button>
           </Col>
         </FormGroup>

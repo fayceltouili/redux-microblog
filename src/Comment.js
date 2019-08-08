@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import { Button } from 'reactstrap'
 import { connect } from 'react-redux'
 import { removeComment } from './actions'
+import {Redirect} from 'react-router-dom';
 //import './Comment.css'
 
 class Comment extends Component {
@@ -15,13 +15,17 @@ class Comment extends Component {
   }
 
   render() {
-    console.log('comment props: ', this.props)
+    console.log('comment props: ', this.props.comment)
+    if(this.props.comment)
     return (
       <div className="Comment">
+        <i class="fas fa-times d-inline p-2 m-1 left PostIcon PostDelete"
+          onClick={this.delete} />
+        <p className="d-inline p-2 m-1">{this.props.comment.text}</p>
 
-        <Button size='sm' onClick={this.delete}>Delete</Button> {this.props.comment.text}
       </div>
     )
+    
   }
 }
 

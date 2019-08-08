@@ -26,18 +26,18 @@ function rootReducer(state = INITIAL_STATE, action) {
 			}
 		}
 		case REMOVE_POST:{
+      const postId = action.postId
       const postsCopy = {...state.posts};
       const commentsCopy = {...state.comments}
-      for(let key of state.posts.comments) {
+      for(let key of postsCopy[postId].comments) {
         delete commentsCopy[key]
       }
       delete postsCopy[action.postId]
-		
 			return {
         ...state,
         posts: postsCopy,
         comments: commentsCopy
-			}
+      }
     }
 
     case UPDATE_POST:{
@@ -79,7 +79,7 @@ function rootReducer(state = INITIAL_STATE, action) {
       const commentsCopy = {...state.comments}
       const postId = commentsCopy[action.commentId].postId
       const post = postCopy[postId];
-      const commentsOfPost = post.comments;
+      let commentsOfPost = post.comments;
       commentsOfPost = commentsOfPost.filter(id => id != action.commentId)
       delete commentsCopy[action.commentId]
 

@@ -1,12 +1,13 @@
 import React, {Component} from 'react';
 import {Redirect} from 'react-router-dom';
-import { Button } from 'reactstrap'
+import { Col, Button, Form, FormGroup, Label, Input} from 'reactstrap';
 import EditPostForm from './EditPostForm';
 import CommentForm from './CommentForm';
 import Comment from './Comment'
 import uuid from 'uuid/v4'
 import { removePost, updatePost, addComment, removeComment } from './actions';
-import { connect } from 'react-redux'
+import { connect } from 'react-redux';
+import './PostDetails.css'
 
 //import './PostDetails.css'
 
@@ -18,6 +19,7 @@ class PostDetails extends Component {
     }
     this.toggleEditForm = this.toggleEditForm.bind(this)
     this.handleDelete = this.handleDelete.bind(this)
+    this.handleUpdate = this.handleUpdate.bind(this)
     this.addComment = this.addComment.bind(this)
     this.deleteComment = this.deleteComment.bind(this)
   }
@@ -29,7 +31,7 @@ class PostDetails extends Component {
   }
   handleDelete(){
     const id = this.props.match.params.id;
-    this.props.deletePost(id);
+    this.props.removePost(id);
   }
   addComment(comment, commentId) {
     comment.postId = this.props.match.params.id
@@ -43,6 +45,10 @@ class PostDetails extends Component {
       return {comments: copyComments}
     })
   }
+  handleUpdate(updatePost){
+    const id = this.props.match.params.id;
+    this.props.updatePost(id,updatePost)
+  }
   render() {
     const post = this.props.post
     const id = this.props.match.params.id;
@@ -51,17 +57,25 @@ class PostDetails extends Component {
     }
 
     return (
-      <div className="PostDetails">
-        {this.state.isEditForm ? <EditPostForm updateBlogPost={this.props.updateBlogPost} toggleEditForm={this.toggleEditForm} {...post} id={id}/>:
+      <div className="PostDetails container">
+        {this.state.isEditForm ? <EditPostForm handleUpdate={this.handleUpdate} toggleEditForm={this.toggleEditForm} {...post} id={id}/>:
         <div>
           <div>
-            <h1>{post.title}</h1>
+
+            <div>
+            <h1 className="d-inline  left" >{post.title}</h1>
+              <i class="far fa-edit d-inline p-2 m-1 float-right PostIcon PostEdit" 
+                onClick={this.toggleEditForm} />
+              <i class="fas fa-times d-inline p-2 m-1 float-right PostIcon PostDelete"
+              onClick={this.handleDelete} />
+            </div>
+
             <i>{post.description}</i>
+            <br/><br/>
             <p>{post.body}</p>
-            <Button onClick={this.toggleEditForm}>Edit</Button>
-            <Button onClick={this.handleDelete}>Delete</Button>
           </div>
           <hr></hr>
+          <h3>Comments</h3>
           {post.comments.map(key => <Comment id={key} key={key} />)}
           <CommentForm  addComment={this.addComment}/>
         </div> 

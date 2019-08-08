@@ -1,0 +1,14 @@
+.PostIcon {
+  opacity: 0.75;
+}
+
+.PostIcon:hover {
+  opacity: 1;
+  cursor: pointer;
+}
+.PostEdit{
+  color: #2365df;
+}
+.PostDelete{
+  color: #e21d1d;
+}

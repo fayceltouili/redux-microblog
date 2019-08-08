@@ -12,8 +12,8 @@ class Header extends Component {
       <div className="Header">
         <h1>{this.props.title}</h1>
         <p>{this.props.description}</p>
-        <Link to='/' style={{marginRight: '20px'}}> Blog</Link>
-        <Link to='/new'>Add a new post</Link>
+        <Link to='/' className="HeaderLinks" style={{ textDecoration: 'none' }}> Blog</Link>
+        <Link to='/new' className="HeaderLinks" style={{ textDecoration: 'none' }}>Add a new post</Link>
       </div>
     )
   }
