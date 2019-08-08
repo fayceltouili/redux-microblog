@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import BlogpostCard from './BlogpostCard'
+import {connect} from 'react-redux';
 import './Home.css'
 
 class Home extends Component {
@@ -22,19 +23,11 @@ class Home extends Component {
   }
 }
 
-export default Home
 
-// import React, {Component} from 'react';
-// //import './Home.css'
+function mapStateToProps(state) {
+  return {
+    posts: state.posts
+  };
+}
 
-// class Home extends Component {
-//   render() {
-//     return (
-//       <div className="Home">
-
-//       </div>
-//     )
-//   }
-// }
-
-// export default Home
+export default connect(mapStateToProps)(Home);

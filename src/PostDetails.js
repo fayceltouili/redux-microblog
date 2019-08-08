@@ -5,6 +5,9 @@ import EditPostForm from './EditPostForm';
 import CommentForm from './CommentForm';
 import Comment from './Comment'
 import uuid from 'uuid/v4'
+import { removePost, updatePost, addComment, removeComment } from './actions';
+import { connect } from 'react-redux'
+
 //import './PostDetails.css'
 
 class PostDetails extends Component {
@@ -12,7 +15,6 @@ class PostDetails extends Component {
     super(props);
     this.state = {
       isEditForm: false,
-      comments: {}
     }
     this.toggleEditForm = this.toggleEditForm.bind(this)
     this.handleDelete = this.handleDelete.bind(this)
@@ -29,11 +31,10 @@ class PostDetails extends Component {
     const id = this.props.match.params.id;
     this.props.deletePost(id);
   }
-  addComment(comment) {
-    const id = uuid()
-    this.setState(st => ({
-      comments: {...st.comments, [id]: comment}
-    }))
+  addComment(comment, commentId) {
+    comment.postId = this.props.match.params.id
+    this.props.addComment(comment, commentId)
+    
   }
   deleteComment(id){
     this.setState(st => {
@@ -43,10 +44,8 @@ class PostDetails extends Component {
     })
   }
   render() {
-    console.log("comments: ", this.state.comments)
-    const { comments }  = this.state
+    const post = this.props.post
     const id = this.props.match.params.id;
-    const post = this.props.posts[id]
     if(!post){
       return <Redirect to="/"></Redirect>
     }
@@ -62,13 +61,29 @@ class PostDetails extends Component {
             <Button onClick={this.toggleEditForm}>Edit</Button>
             <Button onClick={this.handleDelete}>Delete</Button>
           </div>
-          {Object.keys(comments).map(key => <Comment comment={comments[key]} id={key} key={key} deleteComment={this.deleteComment} />)}
+          <hr></hr>
+          {post.comments.map(key => <Comment id={key} key={key} />)}
           <CommentForm  addComment={this.addComment}/>
-          
         </div> 
-        }      </div>
+        }      
+      </div>
     )
   }
 }
 
-export default PostDetails
+function mapStateToProps(state, ownProps) {
+  const postId = ownProps.match.params.id
+  return {
+    post: state.posts[postId],
+
+    // comments: state.posts[postId].map(commentId => state.comments[commentId])
+  };
+}
+
+const mapDispatchToProps = {
+  removePost, 
+  updatePost, 
+  addComment
+};
+
+export default connect(mapStateToProps,mapDispatchToProps)(PostDetails);

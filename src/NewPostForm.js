@@ -1,5 +1,9 @@
 import React, {Component} from 'react';
 import { Col, Button, Form, FormGroup, Label, Input} from 'reactstrap';
+import { addPost } from './actions';
+import slugify from 'slugify';
+import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
 
 //import './NewPostForm.css'
 
@@ -26,10 +30,12 @@ class NewPostForm extends Component {
     const newPost = {
       title: this.state.title,
       description: this.state.description,
-      body: this.state.body
+      body: this.state.body,
+      comments: []
     }
-    this.props.addBlogPost(newPost)
-    this.setState({ title: '', description: '', body: ''})
+    const id = slugify(newPost.title)
+    this.props.addPost({ [id]: newPost})
+    this.props.history.push(`/posts/${id}`);
   }
 
 
@@ -75,6 +81,12 @@ class NewPostForm extends Component {
   }
 }
 
-export default NewPostForm
+
+const mapDispatchToProps = {
+  addPost
+};
+
+export default connect(null, mapDispatchToProps)(withRouter(NewPostForm));
+
 
      
