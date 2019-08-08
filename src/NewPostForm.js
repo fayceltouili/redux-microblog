@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import { Col, Button, Form, FormGroup, Label, Input} from 'reactstrap';
-import { addPost } from './actions';
-import slugify from 'slugify';
+import { addPostToAPI } from './actions';
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 
@@ -25,17 +24,16 @@ class NewPostForm extends Component {
   handleChange(evt){
 		this.setState({ [evt.target.name]: evt.target.value });
   }
-  handleSubmit(evt){
+  
+  async handleSubmit(evt){
     evt.preventDefault()
     const newPost = {
       title: this.state.title,
       description: this.state.description,
       body: this.state.body,
-      comments: []
     }
-    const id = slugify(newPost.title)
-    this.props.addPost({ [id]: newPost})
-    this.props.history.push(`/posts/${id}`);
+    this.props.addPostToAPI(newPost)
+    this.props.history.push(`/`);
   }
 
 
@@ -91,7 +89,7 @@ class NewPostForm extends Component {
 
 
 const mapDispatchToProps = {
-  addPost
+  addPostToAPI
 };
 
 export default connect(null, mapDispatchToProps)(withRouter(NewPostForm));

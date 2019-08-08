@@ -3,7 +3,7 @@ import {Redirect} from 'react-router-dom';
 import EditPostForm from './EditPostForm';
 import CommentForm from './CommentForm';
 import Comment from './Comment'
-import { removePost, updatePost, addComment } from './actions';
+import { removePostFromAPI, updatePostToAPI, addComment } from './actions';
 import { connect } from 'react-redux';
 import './PostDetails.css'
 
@@ -26,8 +26,8 @@ class PostDetails extends Component {
     }))
   }
   handleDelete(){
-    const id = this.props.match.params.id;
-    this.props.removePost(id);
+    const postId = this.props.match.params.id;
+    this.props.removePostFromAPI(postId);
   }
   addComment(comment, commentId) {
     comment.postId = this.props.match.params.id
@@ -35,9 +35,13 @@ class PostDetails extends Component {
     
   }
 
+  // removeComment(commentId) {
+  //   this.props.removeComment(commentId, this.props.id)
+  // }
+
   handleUpdate(updatePost){
     const id = this.props.match.params.id;
-    this.props.updatePost(id,updatePost)
+    this.props.updatePostToAPI(id,updatePost)
   }
   render() {
     const post = this.props.post
@@ -66,7 +70,7 @@ class PostDetails extends Component {
           </div>
           <hr></hr>
           <h3>Comments</h3>
-          {post.comments.map(key => <Comment id={key} key={key} />)}
+          {post.comments.map(comment => <Comment text={comment.text} id={comment.id} key={comment.id} />)}
           <CommentForm  addComment={this.addComment}/>
         </div> 
         }      
@@ -85,9 +89,9 @@ function mapStateToProps(state, ownProps) {
 }
 
 const mapDispatchToProps = {
-  removePost, 
-  updatePost, 
-  addComment
+  removePostFromAPI, 
+  updatePostToAPI, 
+  addComment,
 };
 
 export default connect(mapStateToProps,mapDispatchToProps)(PostDetails);
