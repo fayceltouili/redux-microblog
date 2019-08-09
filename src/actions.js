@@ -4,22 +4,37 @@ import { ADD_POST,
          ADD_COMMENT,
          REMOVE_COMMENT,
          UPDATE_COMMENT,
-         LOAD_POSTS }
+         LOAD_POSTS,
+         VOTE_POST,
+         ERROR_IN_API
+        }
           from "./actionTypes";
 import axios from 'axios';
 
 
 const BASE_URL= 'http://localhost:5000';
 
+function errorInAPI(errorMessage) {
+  return {
+    type: ERROR_IN_API,
+    errorMessage
+  }
+}
+
 export function addPostToAPI(newPost) {
   return async function(dispatch) {
-    const res = await axios.post(`${BASE_URL}/api/posts/`, newPost);
-    const post = res.data
-    const id = res.data.id
-    delete post.id
-    // console.log(post, id)
-    post.comments = []
-    dispatch(addPost(post, id));
+    try {
+      const res = await axios.post(`${BASE_URL}/api/posts/`, newPost);
+      const post = res.data
+      const id = res.data.id
+      delete post.id
+      // console.log(post, id)
+      post.comments = []
+      dispatch(addPost(post, id));
+    } catch(err) {
+      console.error(err)
+      dispatch(errorInAPI(err.message))
+    }
   }
 }
 
@@ -33,9 +48,13 @@ function addPost(post, id) {
 
 export function removePostFromAPI(postId) {
   return async function(dispatch) {
-    const res = await axios.delete(`${BASE_URL}/api/posts/${postId}`);
-    
-    dispatch(removePost(postId));
+    try {
+      await axios.delete(`${BASE_URL}/api/posts/${postId}`);
+      dispatch(removePost(postId));
+    } catch(err) {
+      console.error(err)
+      dispatch(errorInAPI(err.message))
+    }
   }
 }
 
@@ -49,9 +68,13 @@ function removePost(postId) {
 
 export function updatePostToAPI(postId, updatedPost) {
   return async function(dispatch) {
-    const res = await axios.put(`${BASE_URL}/api/posts/${postId}`, updatedPost);
-    
-    dispatch(updatePost(postId, updatedPost));
+    try {
+      await axios.put(`${BASE_URL}/api/posts/${postId}`, updatedPost);
+      dispatch(updatePost(postId, updatedPost));
+    } catch(err) {
+      console.error(err)
+      dispatch(errorInAPI(err.message))
+    }
   }
 }
 function updatePost(postId, updatedPost) {
@@ -62,17 +85,21 @@ function updatePost(postId, updatedPost) {
   };
 }
 
-/**
- *  comment looks like 
- *  {
- *  text: 'text'
- *  postId: 'test-title'
- * }
- * commentId is a uuid
- */
+export function addCommentToAPI(text, postId) {
+  return async function(dispatch) {
+    try {
+      const res = await axios.post(`${BASE_URL}/api/posts/${postId}/comments`,{text});
+      const comment = res.data
+      dispatch(addComment(postId, comment));
+    } catch(err) {
+      console.error(err)
+      dispatch(errorInAPI(err.message))
+    }
+  }
+}
+// `INSERT INTO comments (text, post_id) VALUES ($1, $2) 
 
-export function addComment(comment, postId) {
-
+function addComment(postId, comment) {
   return {
     type: ADD_COMMENT,
     comment,
@@ -80,7 +107,19 @@ export function addComment(comment, postId) {
   };
 }
 
-export function removeComment(commentId, postId) {
+export function removeCommentFromAPI(commentId, postId) {
+  return async function(dispatch) {
+    try {
+      await axios.delete(`${BASE_URL}/api/posts/${postId}/comments/${commentId}`);
+      dispatch(removeComment(commentId, postId));
+    } catch(err) {
+      console.error(err)
+      dispatch(errorInAPI(err.message))
+    }
+  } 
+}
+
+function removeComment(commentId, postId) {
   return {
     type: REMOVE_COMMENT,
     postId,
@@ -100,14 +139,12 @@ export function updateComment(id, updatedComment) {
 export function getPostsFromAPI() {
   return async function(dispatch) {
     let res = await axios.get(`${BASE_URL}/api/posts/`);
-    console.log('res..',res.data)
     let posts = {}
     for (let post of res.data) {
       const postRes = await axios.get(`${BASE_URL}/api/posts/${post.id}`)
       posts[post.id] = postRes.data
       delete post.id
     }
-    console.log("posts...", posts)
     
     dispatch(getPosts(posts));
   };
@@ -119,13 +156,22 @@ function getPosts(posts) {
 }
 
 
-/**
- *       postComments = await axios.get(`${BASE_URL}/api/posts/${post.id}/comments`)
-      postComments.reduce((acc, curr) => {
-        curr.postId = post.id
-        acc[curr.id] = curr
-        delete curr.id
-      }, comments)
-      commentIds = postComments.map(comment => comment.id)
-      post.comments = commentIds
- */
+
+export function votePostOnAPI(direction, postId) {
+  return async function(dispatch) {
+    let res = await axios.post(`${BASE_URL}/api/posts/${postId}/vote/${direction}`);
+    
+    dispatch(votePost(res.data.votes, postId));
+    
+  };
+}
+// normal action creator & action
+
+function votePost(votes, postId) {
+  return { 
+    type: VOTE_POST,
+     votes,
+     postId
+    }
+  
+}

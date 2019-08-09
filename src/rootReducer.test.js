@@ -10,12 +10,10 @@ let action;
 let state;
 
 let post = {
-  'testTitle': {
     title: 'testTitle',
     description: 'testDescription',
     body: 'testBody',
     comments: []
-  }
 }
 
 it("is a function", function () {

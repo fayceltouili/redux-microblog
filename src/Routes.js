@@ -13,7 +13,7 @@ class Routes extends Component {
 
         <Route exact path="/posts/:id" render={(routerProps) =>
           <PostDetails {...routerProps} /> }/>	
-        <Redirect to="/posts" />
+        <Redirect to="/" />
       </Switch>
     );
   }

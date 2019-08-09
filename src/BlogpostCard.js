@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom'
 import { Card, CardHeader, CardBody,
-  CardText } from 'reactstrap';
+  CardText, CardFooter } from 'reactstrap';
+  import Vote from './Vote'
 
 //import './BlogpostCard.css'
 
@@ -19,8 +20,9 @@ class BlogpostCard extends Component {
         <Card>
           <CardHeader tag="h3"><Link to={`posts/${id}`}>{title}</Link></CardHeader>
           <CardBody>
-            <CardText>{description}</CardText>
+            <CardText>{description}...</CardText>
           </CardBody>
+        <CardFooter> <Vote postId={id}/></CardFooter>
         </Card>
       </div>
     )

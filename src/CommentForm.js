@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import { Col, Button, Form, FormGroup, Input} from 'reactstrap';
-import uuid from 'uuid/v4'
 
 //import './CommentForm.css'
 
@@ -20,12 +19,7 @@ class CommentForm extends Component {
   }
   handleSubmit(evt){
     evt.preventDefault()
-    const commentId = uuid();
-    const comment = {
-      text: this.state.comment
-    }
-
-    this.props.addComment(comment, commentId)
+    this.props.addComment(this.state.comment)
     this.setState({comment: ''})
   }
 

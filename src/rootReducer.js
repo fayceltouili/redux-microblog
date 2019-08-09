@@ -4,9 +4,14 @@ import { ADD_POST,
   ADD_COMMENT,
   REMOVE_COMMENT,
   UPDATE_COMMENT,
-  LOAD_POSTS} from "./actionTypes";
+  VOTE_POST,
+  LOAD_POSTS,
+  ERROR_IN_API} from "./actionTypes";
+
+
 const INITIAL_STATE = { 
   posts: {}, 
+  errorMessage: ''
 }
 
 
@@ -26,13 +31,8 @@ function rootReducer(state = INITIAL_STATE, action) {
 		}
 		case REMOVE_POST:{
       console.log('REMOVE_POST')
-      const postId = action.postId
       const postsCopy = {...state.posts};
-      // const commentsCopy = {...state.comments}
-      // console.log(postsCopy, commentsCopy)
-      // for(let commentKey of postsCopy[postId].comments) {
-      //   delete commentsCopy[commentKey]
-      // }
+
       delete postsCopy[action.postId]
 			return {
         ...state,
@@ -65,7 +65,7 @@ function rootReducer(state = INITIAL_STATE, action) {
             ...post,
             comments: [
               ...post.comments, 
-              action.commentId
+              action.comment
             ]
           }
         }
@@ -80,21 +80,45 @@ function rootReducer(state = INITIAL_STATE, action) {
           ...state.posts,
           [action.postId]: {
             ...state.posts[action.postId],
-            comments: [...state.posts[action.postId].comments.filter(comment => comment.id !== action.commentId)]
+            comments: [...state.posts[action.postId].comments
+              .filter(comment => comment.id !== action.commentId)]
           }
         }
       }
     }
 
-    case UPDATE_COMMENT: {
-      return {
-        ...state
-			}
-    }
+
+    // case UPDATE_COMMENT: {
+    //   return {
+    //     ...state
+		// 	}
+    // }
     case LOAD_POSTS:{
       return{
         ...state,
         posts: action.posts
+      }
+    }
+
+    case VOTE_POST:{
+      console.log(action.postId, state.posts[action.postId])
+      return {
+        ...state,
+        posts: {
+          ...state.posts,
+          [action.postId]: {
+            ...state.posts[action.postId],
+            votes: action.votes
+          }
+          
+        }
+      }
+    }
+
+    case ERROR_IN_API: {
+      return {
+        ...state,
+        errorMessage: action.errorMessage
       }
     }
 		default:
@@ -104,23 +128,3 @@ function rootReducer(state = INITIAL_STATE, action) {
 }
 
 export default rootReducer;
-
-
-
-
-// const INITIAL_STATE = {
-// 	posts: {
-//     test: {
-//       title: 'test',
-//       description: 'test',
-//       body: 'ttettest',
-//       comments: ['1234']
-//     }
-//   },
-// 	comments: {
-//     '1234': {
-//       text: 'test',
-//        postId: 'test'
-//       }
-//   }
-// }

@@ -5,3 +5,5 @@ export const ADD_COMMENT = "ADD_COMMENT";
 export const REMOVE_COMMENT = "REMOVE_COMMENT";
 export const UPDATE_COMMENT = "UPDATE_COMMENT";
 export const LOAD_POSTS = 'LOAD_POSTS';
+export const ERROR_IN_API = 'ERROR_IN_API';
+export const VOTE_POST = "VOTE_POST";

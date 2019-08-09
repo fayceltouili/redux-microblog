@@ -1,0 +1,14 @@
+.PostIcon {
+  opacity: 0.75;
+}
+
+.VoteIcon:hover {
+  opacity: 1;
+  cursor: pointer;
+}
+.VoteUp{
+  color: #1fdf29;
+}
+.VoteDown{
+  color: #e21d1d;
+}

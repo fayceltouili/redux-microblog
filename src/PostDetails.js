@@ -3,7 +3,8 @@ import {Redirect} from 'react-router-dom';
 import EditPostForm from './EditPostForm';
 import CommentForm from './CommentForm';
 import Comment from './Comment'
-import { removePostFromAPI, updatePostToAPI, addComment } from './actions';
+import Vote from './Vote';
+import { removePostFromAPI, updatePostToAPI, addCommentToAPI } from './actions';
 import { connect } from 'react-redux';
 import './PostDetails.css'
 
@@ -29,9 +30,9 @@ class PostDetails extends Component {
     const postId = this.props.match.params.id;
     this.props.removePostFromAPI(postId);
   }
-  addComment(comment, commentId) {
-    comment.postId = this.props.match.params.id
-    this.props.addComment(comment, commentId)
+  addComment(text) {
+    const postId = this.props.match.params.id
+    this.props.addCommentToAPI(text, postId)
     
   }
 
@@ -55,22 +56,32 @@ class PostDetails extends Component {
         {this.state.isEditForm ? <EditPostForm handleUpdate={this.handleUpdate} toggleEditForm={this.toggleEditForm} {...post} id={id}/>:
         <div>
           <div>
-
             <div>
             <h1 className="d-inline  left" >{post.title}</h1>
+              
               <i className="far fa-edit d-inline p-2 m-1 float-right PostIcon PostEdit" 
                 onClick={this.toggleEditForm} />
               <i className="fas fa-times d-inline p-2 m-1 float-right PostIcon PostDelete"
               onClick={this.handleDelete} />
-            </div>
 
-            <i>{post.description}</i>
+            </div>
+          <div >
+            <i className="d-inlin left" >{post.description}</i>
+            <div className="d-inline p-2 m-1 float-right">
+              < Vote className="d-inline p-8 m-30 float-right" postId={id}/>
+              </div>
+          </div>
+            
             <br/><br/>
             <p>{post.body}</p>
           </div>
           <hr></hr>
           <h3>Comments</h3>
-          {post.comments.map(comment => <Comment text={comment.text} id={comment.id} key={comment.id} />)}
+          {post.comments.map(comment => 
+            <Comment text={comment.text}
+            postId={id}
+            id={comment.id}
+            key={comment.id} />)}
           <CommentForm  addComment={this.addComment}/>
         </div> 
         }      
@@ -91,7 +102,11 @@ function mapStateToProps(state, ownProps) {
 const mapDispatchToProps = {
   removePostFromAPI, 
   updatePostToAPI, 
-  addComment,
+  addCommentToAPI,
 };
 
 export default connect(mapStateToProps,mapDispatchToProps)(PostDetails);
+
+
+
+

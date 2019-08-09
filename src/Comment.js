@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux'
-import { removeComment } from './actions'
+import { removeCommentFromAPI } from './actions'
 //import './Comment.css'
 
 class Comment extends Component {
@@ -10,7 +10,9 @@ class Comment extends Component {
   }
 
   delete() {
-    this.props.removeComment(this.props.id)
+    const commentId = this.props.id;
+    const postId = this.props.postId
+    this.props.removeCommentFromAPI(commentId, postId)
   }
 
   render() {
@@ -34,7 +36,7 @@ class Comment extends Component {
 // }
 
 const mapDispatchToProps = { 
-  removeComment
+  removeCommentFromAPI
 };
 
 export default connect(null, mapDispatchToProps)(Comment);
