@@ -88,11 +88,24 @@ function rootReducer(state = INITIAL_STATE, action) {
     }
 
 
-    // case UPDATE_COMMENT: {
-    //   return {
-    //     ...state
-		// 	}
-    // }
+    case UPDATE_COMMENT: {
+      const idx = state.posts[action.postId].comments
+        .findIndex( c => c.id === action.commentId )
+      const commentsCopy = [...state.posts[action.postId].comments]
+
+      commentsCopy[idx].text = action.text
+
+      return {
+        ...state,
+        posts: {
+          ...state.posts,
+          [action.postId]: {
+            ...state.posts[action.postId],
+            comments: commentsCopy
+          }
+        }
+      }
+    }
     case LOAD_POSTS:{
       return{
         ...state,
@@ -101,7 +114,6 @@ function rootReducer(state = INITIAL_STATE, action) {
     }
 
     case VOTE_POST:{
-      console.log(action.postId, state.posts[action.postId])
       return {
         ...state,
         posts: {

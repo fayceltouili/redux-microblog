@@ -4,13 +4,26 @@ import {connect} from 'react-redux';
 import './Home.css'
 
 class Home extends Component {
+ 
+  constructor(props) {
+    super(props);
+    this.sortByVotes = this.sortByVotes.bind(this)
+  }
+
+  sortByVotes(a, b) {
+    return this.props.posts[b].votes - this.props.posts[a].votes
+  }
+
   render() {
     const {posts} = this.props
+    const postKeys = Object.keys(posts)
+    const sortedPostKeys = postKeys.sort(this.sortByVotes)
+
     return (
       <div className="Home container">
         <p className="Home-welcome"> Welcome to <strong>Microblog</strong>, our innovative site for communication on the information superhighway</p>
         <div className="row">
-          {Object.keys(posts).map(postKey => <BlogpostCard 
+          {sortedPostKeys.map(postKey => <BlogpostCard 
           key={postKey}
             id={postKey}
             title={posts[postKey].title}
@@ -25,6 +38,7 @@ class Home extends Component {
 
 
 function mapStateToProps(state) {
+  console.log(state.posts)
   return {
     posts: state.posts
   };

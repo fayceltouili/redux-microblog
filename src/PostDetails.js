@@ -14,8 +14,10 @@ class PostDetails extends Component {
     super(props);
     this.state = {
       isEditForm: false,
+      isEditingComment: false,
     }
     this.toggleEditForm = this.toggleEditForm.bind(this)
+    this.toggleEditComment = this.toggleEditComment.bind(this)
     this.handleDelete = this.handleDelete.bind(this)
     this.handleUpdate = this.handleUpdate.bind(this)
     this.addComment = this.addComment.bind(this)
@@ -26,6 +28,11 @@ class PostDetails extends Component {
       isEditForm: !st.isEditForm
     }))
   }
+
+  toggleEditComment() {
+    this.setState(state => ({isEditingComment: !state.isEditingComment })) 
+  }
+
   handleDelete(){
     const postId = this.props.match.params.id;
     this.props.removePostFromAPI(postId);
@@ -36,9 +43,6 @@ class PostDetails extends Component {
     
   }
 
-  // removeComment(commentId) {
-  //   this.props.removeComment(commentId, this.props.id)
-  // }
 
   handleUpdate(updatePost){
     const id = this.props.match.params.id;
@@ -53,7 +57,11 @@ class PostDetails extends Component {
 
     return (
       <div className="PostDetails container">
-        {this.state.isEditForm ? <EditPostForm handleUpdate={this.handleUpdate} toggleEditForm={this.toggleEditForm} {...post} id={id}/>:
+        {this.state.isEditForm ? <EditPostForm
+          handleUpdate={this.handleUpdate}
+          toggleEditForm={this.toggleEditForm}
+          {...post}
+          id={id}/>:
         <div>
           <div>
             <div>
@@ -81,8 +89,9 @@ class PostDetails extends Component {
             <Comment text={comment.text}
             postId={id}
             id={comment.id}
-            key={comment.id} />)}
-          <CommentForm  addComment={this.addComment}/>
+            key={comment.id}
+            toggleEditComment={this.toggleEditComment} />)}
+          {!this.state.isEditingComment ? <CommentForm  addComment={this.addComment}/> : null}
         </div> 
         }      
       </div>
@@ -94,8 +103,6 @@ function mapStateToProps(state, ownProps) {
   const postId = ownProps.match.params.id
   return {
     post: state.posts[postId],
-
-    // comments: state.posts[postId].map(commentId => state.comments[commentId])
   };
 }
 

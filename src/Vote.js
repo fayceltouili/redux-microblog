@@ -23,9 +23,11 @@ class Vote extends Component {
     this.props.votePostOnAPI('down', postId)
   }
   render() {
+    const voteUnit = Math.abs(this.props.votes) === 1  ? 'vote' : 'votes'
+
     return (
       <div>
-         <p className="d-inline"><strong>{this.props.votes} votes </strong></p> {' '}
+         <p className="d-inline"><strong>{this.props.votes} {voteUnit} </strong></p> {' '}
          <i className="fas fa-chevron-circle-up d-inline VoteUp VoteIcon" 
             onClick={this.upVote} /> {' '}
         <i className="fas fa-chevron-circle-down d-inline VoteDown VoteIcon"
@@ -40,12 +42,8 @@ function mapStateToProps(state, ownProps) {
   return {
     votes: state.posts[postId].votes,
 
-    // comments: state.posts[postId].map(commentId => state.comments[commentId])
   };
 }
 
-export default connect(
-  mapStateToProps, 
-  { votePostOnAPI })
-  (Vote);
+export default connect(mapStateToProps, { votePostOnAPI })(Vote);
 

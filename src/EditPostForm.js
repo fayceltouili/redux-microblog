@@ -14,9 +14,13 @@ class EditPostForm extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.isFilledIn = this.isFilledIn.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleCancel = this.handleCancel.bind(this)
   }
   isFilledIn() {
     return this.state.title.length > 0 && this.state.body.length > 0;
+  }
+  handleCancel(){
+    return this.props.toggleEditForm();
   }
   handleChange(evt){
 		this.setState({ [evt.target.name]: evt.target.value });
@@ -78,7 +82,8 @@ class EditPostForm extends Component {
           disabled={!this.isFilledIn()}
           >Submit
           </Button> {' '}
-          <Button>Cancel</Button>
+          <Button
+            onClick={this.props.handleCancel}>Cancel</Button>
           </Col>
         </FormGroup>
       </Form>

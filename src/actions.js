@@ -127,11 +127,23 @@ function removeComment(commentId, postId) {
   };
 }
 
-export function updateComment(id, updatedComment) {
+export function updateCommentToAPI(commentId, text, postId) {
+  return async function(dispatch) {
+    try {
+      await axios.put(`${BASE_URL}/api/posts/${postId}/comments/${commentId}`, {text});
+      dispatch(updateComment(commentId, text, postId));
+    } catch(err) {
+      console.error(err)
+      dispatch(errorInAPI(err.message))
+    }
+  } 
+}
+function updateComment(commentId, text, postId) {
   return {
     type: UPDATE_COMMENT,
-    id,
-    updatedComment
+    commentId,
+    text,
+    postId
   };
 }
 
