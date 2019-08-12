@@ -5,6 +5,7 @@ import { ADD_POST,
          REMOVE_COMMENT,
          UPDATE_COMMENT,
          LOAD_POSTS,
+         LOAD_CATEGORIES,
          VOTE_POST,
          ERROR_IN_API
         }
@@ -168,6 +169,19 @@ function getPosts(posts) {
 }
 
 
+export function getCategoriesFromAPI() {
+  return async function(dispatch) {
+    let res = await axios.get(`${BASE_URL}/api/categories/`);
+    let categories = res.data
+
+    dispatch(getCategories(categories))
+  }
+}
+
+function getCategories(categories) {
+  return { type: LOAD_CATEGORIES, categories };
+}
+
 
 export function votePostOnAPI(direction, postId) {
   return async function(dispatch) {
@@ -187,3 +201,5 @@ function votePost(votes, postId) {
     }
   
 }
+
+

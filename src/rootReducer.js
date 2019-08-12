@@ -6,11 +6,13 @@ import { ADD_POST,
   UPDATE_COMMENT,
   VOTE_POST,
   LOAD_POSTS,
-  ERROR_IN_API} from "./actionTypes";
+  LOAD_CATEGORIES,
+  ERROR_IN_API,} from "./actionTypes";
 
 
 const INITIAL_STATE = { 
   posts: {}, 
+  categories: {},
   errorMessage: ''
 }
 
@@ -110,6 +112,13 @@ function rootReducer(state = INITIAL_STATE, action) {
       return{
         ...state,
         posts: action.posts
+      }
+    }
+
+    case LOAD_CATEGORIES:{
+      return{
+        ...state,
+        categories: action.categories
       }
     }
 

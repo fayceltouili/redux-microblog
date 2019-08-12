@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Routes from "./Routes";
 import './App.css';
 import Header from './Header';
-import {getPostsFromAPI} from './actions';
+import {getPostsFromAPI, getCategoriesFromAPI} from './actions';
 import { connect } from 'react-redux';
 
 
@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 class App extends Component{
   componentDidMount() {
     this.props.getPostsFromAPI();
+    this.props.getCategoriesFromAPI();
   }
   render(){
 
@@ -22,11 +23,9 @@ class App extends Component{
   }
 }
 
-function mapStateToProps(state) {
-  return { posts: state.posts };
-}
+
 
 export default connect(
-    mapStateToProps,
-    { getPostsFromAPI }
+    null,
+    { getPostsFromAPI, getCategoriesFromAPI}
 )(App);

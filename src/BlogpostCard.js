@@ -12,17 +12,17 @@ class BlogpostCard extends Component {
   // }
 
   render() {
-    const {title, description, id} = this.props
+    const {title, description, id, tags} = this.props
 
- 
     return (
       <div className="BlogpostCard col-sm-4, col-lg-3">
         <Card>
           <CardHeader tag="h3"><Link to={`posts/${id}`}>{title}</Link></CardHeader>
           <CardBody>
-            <CardText>{description}...</CardText>
+            <CardText>{description}</CardText>
+            {/* <CardText>tags: {tags.map( tag=> ( <i>{tag}</i>))}</CardText> */}
           </CardBody>
-        <CardFooter> <Vote postId={id}/></CardFooter>
+        <CardFooter > <Vote postId={id}/></CardFooter>
         </Card>
       </div>
     )

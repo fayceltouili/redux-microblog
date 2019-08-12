@@ -45,7 +45,7 @@ class CommentForm extends Component {
           <Button
           color="success"
           disabled={!this.isFilledIn()}
-          >Add
+          >Add comment
           </Button>
         </Col>     
       </Form>

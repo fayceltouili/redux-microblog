@@ -81,7 +81,13 @@ class PostDetails extends Component {
           </div>
             
             <br/><br/>
-            <p>{post.body}</p>
+            {post.body}
+            <div>
+              tags:
+            {post.tags.map( (tag) => (
+              <i d-inline> {tag}</i>
+            ))}
+            </div>
           </div>
           <hr></hr>
           <h3>Comments</h3>

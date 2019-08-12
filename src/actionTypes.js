@@ -7,3 +7,4 @@ export const UPDATE_COMMENT = "UPDATE_COMMENT";
 export const LOAD_POSTS = 'LOAD_POSTS';
 export const ERROR_IN_API = 'ERROR_IN_API';
 export const VOTE_POST = "VOTE_POST";
+export const LOAD_CATEGORIES = 'LOAD_CATEGORIES';

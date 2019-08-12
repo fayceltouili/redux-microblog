@@ -12,7 +12,12 @@ class NewPostForm extends Component {
     this.state ={
       title: '',
       description: '',
-      body: ''
+      body: '',
+      ...this.props.categoriesList.reduce((acc, currCategory) => {
+        acc[currCategory] = false
+        return acc
+      }, {})
+
     }
     this.handleChange = this.handleChange.bind(this);
     this.isFilledIn = this.isFilledIn.bind(this);
@@ -25,6 +30,10 @@ class NewPostForm extends Component {
 		this.setState({ [evt.target.name]: evt.target.value });
   }
   
+  handleCategoriesToggle(category) {
+    this.setState(st => ({[category]: !st.category}))
+  }
+
   async handleSubmit(evt){
     evt.preventDefault()
     const newPost = {
@@ -38,6 +47,7 @@ class NewPostForm extends Component {
 
 
   render() {
+    console.log("props", this.props, 'state', this.state)
     return (
       <div className="NewPostForm container">
         <h2 color="blue">New Post</h2>
@@ -70,6 +80,24 @@ class NewPostForm extends Component {
                     id="NewPost-body" />
           </Col>
         </FormGroup>
+{/* 
+        <FormGroup row>
+          {this.props.categories.map(category => (
+            <div d-inline >
+              <Label for={`NewPost-categories-${category}`}>{category}       
+              <Input type="checkbox" id={`NewPost-categories-${category}`} />{' '}
+              </Label>
+              
+            </div>
+          ))}
+        </FormGroup> */}
+
+            <div>
+              tags:
+            {this.props.categoriesList.map( (tag) => (
+              <i d-inline style={{backgroundColor: '#D5EAF2', marginRight: '4px'}}  onClick={(tag) => {this.handleCategoriesToggle(tag)}}> {tag}</i>
+            ))}
+            </div>
 
         <FormGroup check row>
           <Col align="right" sm={{ size: 10, offset: 0}}>
@@ -87,12 +115,18 @@ class NewPostForm extends Component {
   }
 }
 
+function mapStateToProps(state) {
+  return {
+    categories: state.categories,
+    categoriesList: Object.values(state.categories)
+  };
+}
 
 const mapDispatchToProps = {
   addPostToAPI
 };
 
-export default connect(null, mapDispatchToProps)(withRouter(NewPostForm));
+export default connect(mapStateToProps, mapDispatchToProps)(withRouter(NewPostForm));
 
 
      

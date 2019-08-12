@@ -27,6 +27,7 @@ class Home extends Component {
           key={postKey}
             id={postKey}
             title={posts[postKey].title}
+            tags={posts[postKey].tags}
             description={posts[postKey].description}
             />)}
         </div>
@@ -38,7 +39,6 @@ class Home extends Component {
 
 
 function mapStateToProps(state) {
-  console.log(state.posts)
   return {
     posts: state.posts
   };
