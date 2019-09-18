@@ -79,15 +79,9 @@ class PostDetails extends Component {
               < Vote className="d-inline p-8 m-30 float-right" postId={id}/>
               </div>
           </div>
-            
+
             <br/><br/>
-            {post.body}
-            <div>
-              tags:
-            {post.tags.map( (tag) => (
-              <i d-inline> {tag}</i>
-            ))}
-            </div>
+            <td dangerouslySetInnerHTML={{__html: post.body}} />
           </div>
           <hr></hr>
           <h3>Comments</h3>
