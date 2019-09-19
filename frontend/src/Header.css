@@ -1,16 +1,33 @@
+
 .Header{
   background-color: #E8ECEF;
   text-align:  left;
-  padding-left: 30px;
-  padding-top: 50px;
+  padding-left: 30%;
+  padding-top: 10%;
   padding-bottom: 40px;
   margin: 5px 15px 60px 15px;
   border: 1px solid rgb(197, 200, 202);
   border-radius: 4px;
-
+  background-image: url("images/san-francisco.jpg");
+  background-size: cover;
+  box-shadow: 0 4px 8px 0 #00000033, 0 6px 20px 0 #00000030;
 }
 
+
+
+.Header > h1{
+  color: #ad3b0e;
+}
 .HeaderLinks{
   text-decoration: none;
   margin-right: 20px;
 }
+
+
+.HeaderLinks {
+  position: relative;
+  color: #b96442;
+  text-decoration: none;
+}
+
+a.HeaderLinks:hover, a.HeaderLinks:active {color: #ad3b0e;}

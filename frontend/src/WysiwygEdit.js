@@ -4,23 +4,20 @@ import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
-import { addPostToAPI } from './actions';
-import { connect } from 'react-redux'
-import { withRouter } from 'react-router-dom'
 import '../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 
-class EditorComponent extends Component {
+export default class WysiwygEdit extends Component {
   constructor(props) {
     super(props);
-    const html = ``;
+    const html = this.props.body;
     const contentBlock = htmlToDraft(html);
     if (contentBlock) {
       const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
       const editorState = EditorState.createWithContent(contentState);
       this.state = {
-        title: '',
-        description: '',
+        title: this.props.title,
+        description: this.props.description,
         editorState,
       };
     }
@@ -46,15 +43,15 @@ class EditorComponent extends Component {
   
   async handleSubmit(evt){
     evt.preventDefault()
-    const newPost = {
+    const updatedPost = {
       title: this.state.title,
       description: this.state.description,
       body: draftToHtml(convertToRaw(this.state.editorState.getCurrentContent())),
     }
-    this.props.addPostToAPI(newPost)
-    this.props.history.push(`/`);
+    this.props.handleUpdate(updatedPost,this.props.id)
+    this.setState({ title: '', description: '', body: ''})
+    this.props.toggleEditForm()
   }
-
 
 
   render() {
@@ -64,7 +61,7 @@ class EditorComponent extends Component {
 
     return (
       <div className="NewPostForm container">
-        <h2 color="blue">New Post</h2>
+        <h2 color="blue">Edit Post</h2>
            <Form onSubmit={this.handleSubmit}> 
         <FormGroup row>
         <Col sm={10}>
@@ -115,16 +112,3 @@ class EditorComponent extends Component {
     );
   }
 }
-function mapStateToProps(state) {
-  return {
-    categories: state.categories,
-    categoriesList: Object.values(state.categories)
-  };
-}
-
-const mapDispatchToProps = {
-  addPostToAPI
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(EditorComponent));
-

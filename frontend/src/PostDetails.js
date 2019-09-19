@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import {Redirect} from 'react-router-dom';
-import EditPostForm from './EditPostForm';
+import WysiwygEdit from './WysiwygEdit';
 import CommentForm from './CommentForm';
 import Comment from './Comment'
 import Vote from './Vote';
@@ -57,7 +57,7 @@ class PostDetails extends Component {
 
     return (
       <div className="PostDetails container">
-        {this.state.isEditForm ? <EditPostForm
+        {this.state.isEditForm ? <WysiwygEdit
           handleUpdate={this.handleUpdate}
           toggleEditForm={this.toggleEditForm}
           {...post}
