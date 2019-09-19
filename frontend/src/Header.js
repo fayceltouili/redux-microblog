@@ -10,7 +10,7 @@ class Header extends Component {
   render() {
     return (
       <div className="Header container">
-        <h1 style={{fontSize: '4em'}}>{this.props.title}</h1>
+        <h1 >{this.props.title}</h1>
         <p className="Description">{this.props.description}</p>
         <div>
           <Link to='/' className="HeaderLinks HeaderLinks-ltr" style={{ textDecoration: 'none'}}><strong>Blog</strong> </Link>
