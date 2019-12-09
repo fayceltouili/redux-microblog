@@ -7,17 +7,17 @@ import { ADD_POST,
   VOTE_POST,
   LOAD_POSTS,
   LOAD_CATEGORIES,
-  ERROR_IN_API,} from "./actionTypes";
+  ERROR_IN_API,} from "./Constants";
 
 
 const INITIAL_STATE = { 
   posts: {}, 
   categories: {},
-  errorMessage: ''
+  errors: ''
 }
 
 
-function rootReducer(state = INITIAL_STATE, action) {
+const rootReducer = (state = INITIAL_STATE, action) => {
 	switch (action.type) {
 		case ADD_POST: {
       console.log('ADD_POST')
@@ -131,7 +131,6 @@ function rootReducer(state = INITIAL_STATE, action) {
             ...state.posts[action.postId],
             votes: action.votes
           }
-          
         }
       }
     }
@@ -139,7 +138,7 @@ function rootReducer(state = INITIAL_STATE, action) {
     case ERROR_IN_API: {
       return {
         ...state,
-        errorMessage: action.errorMessage
+        errors: action.errors
       }
     }
 		default:

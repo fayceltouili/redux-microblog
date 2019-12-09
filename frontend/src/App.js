@@ -1,31 +1,32 @@
-import React, {Component} from 'react';
+import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
 import Routes from "./Routes";
 import './App.css';
 import Header from './Header';
-import {getPostsFromAPI, getCategoriesFromAPI} from './actions';
-import { connect } from 'react-redux';
+import { getPostsFromAPI, getCategoriesFromAPI } from './actions';
 
 
+const App = props => {
 
-class App extends Component{
-  componentDidMount() {
-    this.props.getPostsFromAPI();
-    this.props.getCategoriesFromAPI();
-  }
-  render(){
+  const { getPostsFromAPI, getCategoriesFromAPI } = props;
 
-    return(
-        <div>
-          <Header />
-          <Routes/>
-        </div>
-    );
-  }
+  useEffect(() => {
+    const loadFromApi = async () => {
+      await getPostsFromAPI();
+      await getCategoriesFromAPI();
+    }
+    loadFromApi();
+  });
+
+  return(
+    <div>
+      <Header />
+      <Routes/>
+    </div>
+  );
 }
-
-
 
 export default connect(
     null,
-    { getPostsFromAPI, getCategoriesFromAPI}
+    { getPostsFromAPI, getCategoriesFromAPI }
 )(App);

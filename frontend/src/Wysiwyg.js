@@ -1,4 +1,8 @@
-import React, { Component } from 'react';
+/*
+* Form to add a new Post
+*/
+
+import React, { useState } from 'react';
 import { Col, Button, Form, FormGroup, Label, Input} from 'reactstrap';
 import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
@@ -10,121 +14,101 @@ import { withRouter } from 'react-router-dom'
 import '../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 
-class EditorComponent extends Component {
-  constructor(props) {
-    super(props);
-    const html = ``;
-    const contentBlock = htmlToDraft(html);
-    if (contentBlock) {
-      const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
-      const editorState = EditorState.createWithContent(contentState);
-      this.state = {
-        title: '',
-        description: '',
-        editorState,
-      };
-    }
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handleChange = this.handleChange.bind(this);
-    this.isFilledIn = this.isFilledIn.bind(this);
-  }
+const EditorComponent = props => {
 
-  isFilledIn() {
-    const body = draftToHtml(convertToRaw(this.state.editorState.getCurrentContent()))
-    return this.state.title.length > 0 && body.length > 10;
-  }
+  const { addPostToAPI, history } = props;
 
-  onEditorStateChange: Function = (editorState) => {
-    this.setState({
-      editorState,
-    });
-  };
+  const html = ''
+  const contentBlock = htmlToDraft(html);
+  const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
 
-  handleChange(evt){
-		this.setState({ [evt.target.name]: evt.target.value });
-  }
+
+  const [title, setTitle] = useState('')
+  const [description, setDescription] = useState('');
+  const [editorState, setEditorState] = useState(EditorState.createWithContent(contentState));
+
+ 
+  // disable submit button if title && body are empty
+  const isFilledIn = () => 
+    title.length > 0 && draftToHtml(convertToRaw(editorState.getCurrentContent())).length > 10
   
-  async handleSubmit(evt){
+ 
+  const handleSubmit = async evt => {
     evt.preventDefault()
-    const newPost = {
-      title: this.state.title,
-      description: this.state.description,
-      body: draftToHtml(convertToRaw(this.state.editorState.getCurrentContent())),
-    }
-    this.props.addPostToAPI(newPost)
-    this.props.history.push(`/`);
+    addPostToAPI({
+      title,
+      description,
+      body: draftToHtml(convertToRaw(editorState.getCurrentContent())),
+    })
+    history.push(`/`);
   }
 
 
+  return (
+    <div className="NewPostForm container">
+      <h2 color="blue">New Post</h2>
+          <Form onSubmit={handleSubmit}> 
 
-  render() {
-    const { editorState } = this.state;
-    let value= convertToRaw(editorState.getCurrentContent())
-    console.log(value)
+      <FormGroup row>
+      <Col sm={10}>
+        <Label for="NewPost-title">Title:</Label>
+          <Input
+          onChange={e => setTitle(e.target.value)}
+          value={title}
+          type="text" name="title"
+          id="NewPost-title"  />
+      </Col>
+      </FormGroup>
 
-    return (
-      <div className="NewPostForm container">
-        <h2 color="blue">New Post</h2>
-           <Form onSubmit={this.handleSubmit}> 
-        <FormGroup row>
+
+      <FormGroup row>
         <Col sm={10}>
-          <Label for="NewPost-title">Title:</Label>
-            <Input onChange={this.handleChange}
-                   value={this.state.title}
-                   type="text" name="title"
-                   id="NewPost-title"  />
-          </Col>
-        </FormGroup>
-        <FormGroup row>
-          <Col sm={10}>
-          <Label for="NewPost-description">Description:</Label>
-            <Input onChange={this.handleChange}
-                  value={this.state.description}
-                  type="text" name="description"
-                  id="NewPost-description" />
-          </Col>
-        </FormGroup>
-        <FormGroup row>
-          <Col sm={10}>
-            <Label for="NewPost-body"></Label>
-            <div style={{border:'1px solid #00000030'}}>
-              <Editor
-              editorState={editorState}
-              wrapperClassName="demo-wrapper"
-              editorClassName="demo-editor"
-              onEditorStateChange={this.onEditorStateChange}
-              />
-            </div>
-          </Col>
-        </FormGroup>
-        
-        <FormGroup check row>
-          <Col align="right" sm={{ size: 10, offset: 0}}>
-            <Button
-            color="success"
-            disabled={!this.isFilledIn()}
-            >Submit
-            </Button> {' '}
-            <Button>Cancel</Button>
-          </Col>
-        </FormGroup>
-        </Form>
-        </div>
+        <Label for="NewPost-description">Description:</Label>
+          <Input
+          onChange={e => setDescription(e.target.value)}
+          value={description}
+          type="text" name="description"
+          id="NewPost-description" />
+        </Col>
+      </FormGroup>
+
+      <FormGroup row>
+        <Col sm={10}>
+          <Label for="NewPost-body"></Label>
+            <Editor
+            editorState={editorState}
+            wrapperClassName="demo-wrapper"
+            editorClassName="demo-editor"
+            onEditorStateChange={editorState =>
+              setEditorState(editorState)}
+            />
+        </Col>
+      </FormGroup>
       
-      
-    );
-  }
+      <FormGroup check row>
+        <Col align="right" sm={{ size: 10, offset: 0}}>
+          <Button
+          color="success"
+          disabled={!isFilledIn()}
+          >Submit
+          </Button> {' '}
+          <Button>Cancel</Button>
+        </Col>
+      </FormGroup>
+      </Form>
+      </div>
+  );
 }
-function mapStateToProps(state) {
+
+const mapStateToProps = state => {
   return {
     categories: state.categories,
     categoriesList: Object.values(state.categories)
   };
 }
 
-const mapDispatchToProps = {
-  addPostToAPI
-};
 
-export default connect(mapStateToProps, mapDispatchToProps)(withRouter(EditorComponent));
-
+export default connect(
+  mapStateToProps,
+  { addPostToAPI })
+  (withRouter(EditorComponent));

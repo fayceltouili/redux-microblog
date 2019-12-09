@@ -1,75 +1,66 @@
-import React, {Component} from 'react';
+import React, { useState } from 'react';
 import { connect } from 'react-redux'
 import { removeCommentFromAPI, updateCommentToAPI } from './actions';
 import EditCommentForm from './EditCommentForm'
 //import './Comment.css'
 
-class Comment extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isEditForm: false,
-    }
-    this.deleteComment = this.deleteComment.bind(this);
-    this.toggleEditCommentForm = this.toggleEditCommentForm.bind(this);
-    this.handleCommentUpdate = this.handleCommentUpdate.bind(this)
-  }
+const Comment = props => {
 
-  deleteComment() {
-    const commentId = this.props.id;
-    const postId = this.props.postId
-    this.props.removeCommentFromAPI(commentId, postId)
-  }
+  const {
+    removeCommentFromAPI,
+    updateCommentToAPI, 
+    comment,
+    postId,
+    commentId,
+    toggleEditComment
+  } = props
 
-  toggleEditCommentForm(){
-    this.props.toggleEditComment()
-    this.setState(st => ({
-      isEditForm: !st.isEditForm
-    }));
+  console.log('comment', comment)
+
+  const [isEditForm, setIsEditForm] = useState(false)
+
+  const deleteComment = () => 
+    removeCommentFromAPI(commentId, postId)
+
+  const toggleEditCommentForm = () => {
+    toggleEditComment()
+    setIsEditForm(!isEditForm)
   }
-  handleCommentUpdate(text){
-    const commentId = this.props.id;
-    const postId = this.props.postId
-    this.props.updateCommentToAPI(commentId, text, postId)
-    this.toggleEditCommentForm()
+  const handleCommentUpdate = commentText => {
+    updateCommentToAPI(commentId, commentText, postId)
+    toggleEditCommentForm()
   }
   
-  render() {
-    console.log('comment',this.state)
-    const { text, commentId} = this.props
-    return (
-    <div>
-      
-      {this.state.isEditForm ? <div> <EditCommentForm 
-                                handleCommentUpdate={this.handleCommentUpdate}
-                                text={text} commentId={commentId}
-                                /> </div>: 
-    
-      <div className="Comment">
-        <i className="fas fa-times d-inline p-2 m-1 left PostIcon PostDelete"
-          onClick={this.deleteComment} />
-        <i className="far fa-edit d-inline p-2 m-1 left PostIcon PostEdit" 
-              onClick={this.toggleEditCommentForm} />
-        <p className="d-inline p-2 m-1">{text}</p>
 
-      </div>
-      }
-    </div>
-    )
+  return (
+  <div>
+    {isEditForm ? 
+      <div> 
+        <EditCommentForm 
+          handleCommentUpdate={handleCommentUpdate}
+          oldComment={comment} commentId={commentId} /> 
+      </div>: 
     
-  }
+    <div className="Comment">
+      <i className="fas fa-times d-inline p-2 m-1 left PostIcon PostDelete"
+        onClick={deleteComment} />
+      <i className="far fa-edit d-inline p-2 m-1 left PostIcon PostEdit" 
+            onClick={toggleEditCommentForm} />
+      <p className="d-inline p-2 m-1">{comment}</p>
+
+    </div>
+    }
+  </div>
+  )  
 }
 
-// function mapStateToProps(state, ownProps) {
-//   const commentId = ownProps.id
-//   return {
-//     comment: state.comments[commentId]
-//   };
-// }
 
 const mapDispatchToProps = { 
   removeCommentFromAPI,
-  updateCommentToAPI
+  updateCommentToAPI,
 };
 
-export default connect(null, mapDispatchToProps)(Comment);
+export default connect(
+  null,
+  mapDispatchToProps
+  )(Comment);

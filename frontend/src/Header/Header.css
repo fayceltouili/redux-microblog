@@ -7,7 +7,7 @@
   margin: 5px 15px 60px 15px;
   border: 1px solid rgb(197, 200, 202);
   border-radius: 4px;
-  background-image: url("images/san-francisco.jpg");
+  background-image: url("../images/san-francisco.jpg");
   background-size: cover;
   box-shadow: 0 4px 8px 0 #00000033, 0 6px 20px 0 #00000030;
 }
