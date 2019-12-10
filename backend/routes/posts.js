@@ -18,7 +18,7 @@ const router = new express.Router();
  *
  */
 
-router.get("/", async function (req, res, next) {
+router.get("/", async (req, res, next) => {
   try {
     const result = await db.query(
       `SELECT p.id,
@@ -48,7 +48,7 @@ router.get("/", async function (req, res, next) {
  *      }
  */
 
-router.get("/:id", async function (req, res, next) {
+router.get("/:id", async (req, res, next) => {
   try {
     const postsRes = await db.query(
       `SELECT p.id,
@@ -94,7 +94,7 @@ router.get("/:id", async function (req, res, next) {
  *
  */
 
-router.post("/:id/vote/:direction", async function (req, res, next) {
+router.post("/:id/vote/:direction", async  (req, res, next) => {
   try {
     let delta = req.params.direction === "up" ? +1 : -1;
     const result = await db.query(
@@ -113,7 +113,7 @@ router.post("/:id/vote/:direction", async function (req, res, next) {
  *
  */
 
-router.post("/", async function (req, res, next) {
+router.post("/", async (req, res, next) => {
   try {
     const {title, body, description, tags} = req.body;
 

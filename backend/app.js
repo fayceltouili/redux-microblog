@@ -13,7 +13,6 @@ const app = express();
 
 app.use(morgan("tiny"));
 app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cors());
 
 app.use("/api/posts/:post_id/comments", postCommentsRoutes);
@@ -24,7 +23,7 @@ app.use("/api/categories", categoriesRoutes);
 
 /** 404 Not Found handler. */
 
-app.use(function (req, res, next) {
+app.use((req, res, next) => {
   const err = new Error("Not Found");
   err.status = 404;
   next(err);
@@ -32,7 +31,7 @@ app.use(function (req, res, next) {
 
 /** Generic error handler. */
 
-app.use(function (err, req, res, next) {
+app.use((err, req, res, next) => {
   if (err.stack) console.error(err.stack);
 
   res.status(err.status || 500).json({

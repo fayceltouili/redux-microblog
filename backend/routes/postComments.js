@@ -11,7 +11,7 @@ const router = express.Router({ mergeParams: true });
  *
  */
 
-router.get("/", async function (req, res, next) {
+router.get("/", async (req, res, next) => {
   try {
     const result = await db.query(
       "SELECT id, text FROM comments WHERE post_id = $1 ORDER BY id",
@@ -29,7 +29,9 @@ router.get("/", async function (req, res, next) {
  *
  */
 
-router.post("/", async function (req, res, next) {
+router.post("/", async (req, res, next) => {
+  console.log('text.................',req.body.text)
+
   try {
     const result = await db.query(
       `INSERT INTO comments (text, post_id) VALUES ($1, $2) 
@@ -48,7 +50,7 @@ router.post("/", async function (req, res, next) {
  *
  */
 
-router.put("/:id", async function (req, res, next) {
+router.put("/:id", async (req, res, next) => {
   console.log('tesxt.................',req.body.text)
   try {
     const result = await db.query(
@@ -67,7 +69,7 @@ router.put("/:id", async function (req, res, next) {
  *
  */
 
-router.delete("/:id", async function (req, res, next) {
+router.delete("/:id", async (req, res, next) => {
   try {
     await db.query("DELETE FROM comments WHERE id=$1", [req.params.id]);
     return res.json({ message: "deleted" });

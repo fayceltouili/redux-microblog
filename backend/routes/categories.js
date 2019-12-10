@@ -4,7 +4,7 @@ const db = require("../db");
 const express = require("express");
 const router = express.Router({ mergeParams: true });
 
-router.get("/", async function (req, res, next) {
+router.get("/", async (req, res, next) => {
   try {
     const result = await db.query(
       `SELECT * 
