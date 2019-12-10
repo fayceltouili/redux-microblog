@@ -8,12 +8,11 @@ import { getPostsFromAPI, getCategoriesFromAPI } from './actions';
 
 const App = props => {
 
-  const { getPostsFromAPI, getCategoriesFromAPI } = props;
+  const { getPostsFromAPI } = props;
 
   useEffect(() => {
     const loadFromApi = async () => {
       await getPostsFromAPI();
-      await getCategoriesFromAPI();
     }
     loadFromApi();
   });

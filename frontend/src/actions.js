@@ -1,19 +1,20 @@
-import { ADD_POST,
-         REMOVE_POST,
-         UPDATE_POST,
-         ADD_COMMENT,
-         REMOVE_COMMENT,
-         UPDATE_COMMENT,
-         LOAD_POSTS,
-         LOAD_CATEGORIES,
-         VOTE_POST,
-         ERROR_IN_API
-        }
-          from "./Constants";
 import axios from 'axios';
+import{
+  ADD_POST,
+  REMOVE_POST,
+  UPDATE_POST,
+  ADD_COMMENT,
+  REMOVE_COMMENT,
+  UPDATE_COMMENT,
+  LOAD_POSTS,
+  LOAD_CATEGORIES,
+  VOTE_POST,
+  ERROR_IN_API
+}
+  from "./Constants";
 
 
-const BASE_URL= process.env.REACT_APP_BASE_URL || 'http://localhost:5000';
+const BASE_URL= process.env.REACT_APP_BASE_URL || 'https://microblogalog-backend.herokuapp.com/';
 
 const  errorInAPI = errors => {
   return {
@@ -36,7 +37,6 @@ export const addPostToAPI = newPost => {
     }
   }
 }
-
 
 const addPost = (post, id) => {
   return {
@@ -85,28 +85,22 @@ const updatePost = (postId, updatedPost) => {
   };
 }
 
-export const addCommentToAPI = (text, postId) => {
-  console.log('comment action .....', postId)
 
+export const addCommentToAPI = (text, postId) => {
   return async dispatch => {
     try {
-      const res = await axios.post(`${BASE_URL}/api/posts/${postId}/comments`,{text});
-      const comment = res.data
-      console.log('comment action', comment)
-
-      dispatch(addComment(postId, comment));
+      const res = await axios.post(`${BASE_URL}/api/posts/${postId}/comments/`, {text})
+      dispatch(addComment(postId, res.data));
     } catch(err) {
-      console.log('comment action err', err)
-
-      console.error(err)
+      console.log(err)
       dispatch(errorInAPI(err.message))
     }
   }
 }
+
 // `INSERT INTO comments (text, post_id) VALUES ($1, $2) 
 
 const addComment = (postId, comment) => {
-  console.log('comment', comment)
   return {
     type: ADD_COMMENT,
     comment,
@@ -114,7 +108,10 @@ const addComment = (postId, comment) => {
   };
 }
 
+
+
 export const removeCommentFromAPI = (commentId, postId) => {
+
   return async dispatch => {
     try {
       await axios.delete(`${BASE_URL}/api/posts/${postId}/comments/${commentId}`);
@@ -199,7 +196,6 @@ export const votePostOnAPI = (direction, postId) => {
     
   };
 }
-// normal action creator & action
 
 const votePost = (votes, postId) => {
   return { 

@@ -1,0 +1,11 @@
+.Home-element{
+  border: 1px solid #c7d8ee;
+  border-radius: 5px;
+  margin-bottom: 3%;
+  padding: 2%;
+  height: 200px;
+  background-color: #ebf2f7;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  overflow: hidden;
+
+}

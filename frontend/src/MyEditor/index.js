@@ -1,65 +1,70 @@
+/*
+* Form to add a new Post
+*/
+
 import React, { useState } from 'react';
 import { Col, Button, Form, FormGroup, Label, Input} from 'reactstrap';
 import { EditorState, convertToRaw, ContentState } from 'draft-js';
 import { Editor } from 'react-draft-wysiwyg';
 import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
-import '../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import { addPostToAPI } from '../actions';
+import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
+import '../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 
 
-const WysiwygEdit = props => {
+const EditorComponent = props => {
 
-  const { handleUpdate, toggleEditForm, post } = props
+  const { addPostToAPI, history } = props;
 
-  const html = post.body
+  const html = ''
   const contentBlock = htmlToDraft(html);
   const contentState = ContentState.createFromBlockArray(contentBlock.contentBlocks);
 
 
-  const [title, setTitle] = useState(post.title)
-  const [description, setDescription] = useState(post.description);
+  const [title, setTitle] = useState('')
+  const [description, setDescription] = useState('');
   const [editorState, setEditorState] = useState(EditorState.createWithContent(contentState));
 
-
-
+ 
   // disable submit button if title && body are empty
   const isFilledIn = () => 
     title.length > 0 && draftToHtml(convertToRaw(editorState.getCurrentContent())).length > 10
-
+  
+ 
   const handleSubmit = async evt => {
     evt.preventDefault()
-    handleUpdate({
+    addPostToAPI({
       title,
       description,
       body: draftToHtml(convertToRaw(editorState.getCurrentContent())),
-    },
-    post.id)
-    toggleEditForm()
+    })
+    history.push(`/`);
   }
-
 
   return (
     <div className="NewPostForm container">
-      <h2 color="blue">Edit Post</h2>
+      <h2 color="blue">New Post</h2>
           <Form onSubmit={handleSubmit}> 
+
       <FormGroup row>
       <Col sm={10}>
         <Label for="NewPost-title">Title:</Label>
           <Input
-          onChange={e =>
-            setTitle(e.target.value)}
+          onChange={e => setTitle(e.target.value)}
           value={title}
           type="text" name="title"
           id="NewPost-title"  />
-        </Col>
+      </Col>
       </FormGroup>
+
 
       <FormGroup row>
         <Col sm={10}>
         <Label for="NewPost-description">Description:</Label>
           <Input
-          onChange={e =>
-            setDescription(e.target.value)}
+          onChange={e => setDescription(e.target.value)}
           value={description}
           type="text" name="description"
           id="NewPost-description" />
@@ -69,7 +74,6 @@ const WysiwygEdit = props => {
       <FormGroup row>
         <Col sm={10}>
           <Label for="NewPost-body"></Label>
-          <div style={{border:'1px solid #00000030'}}>
             <Editor
             editorState={editorState}
             wrapperClassName="demo-wrapper"
@@ -77,7 +81,6 @@ const WysiwygEdit = props => {
             onEditorStateChange={editorState =>
               setEditorState(editorState)}
             />
-          </div>
         </Col>
       </FormGroup>
       
@@ -92,8 +95,22 @@ const WysiwygEdit = props => {
         </Col>
       </FormGroup>
       </Form>
-      </div>    
+      </div>
   );
 }
 
-export default WysiwygEdit;
+const mapStateToProps = state => {
+  return {
+    categories: state.categories,
+    categoriesList: Object.values(state.categories)
+  };
+}
+
+const mapDispatchToProps = {
+  addPostToAPI
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+  )(withRouter(EditorComponent));

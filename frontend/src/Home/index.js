@@ -1,28 +1,40 @@
 import React from 'react';
-import BlogpostCard from '../BlogpostCard'
 import {connect} from 'react-redux';
+import { Link } from 'react-router-dom';
+import * as moment from 'moment';
+import Vote from '../Vote';
+import './Home.css';
 
 const Home = ({ posts }) => {
  
-
+console.log(posts)
   // sort posts by vote
   const sortedPostVote = Object.keys(posts).sort((a, b) => 
     posts[b].votes - posts[a].votes
     )
 
+    // extract first image path from body
+    const getImgSrc = body => 
+      (( body.split(' ').filter(x => x.includes("src="))[0] || '' ).split('src="')[1] || '').slice(0, -1)
+  
+
   return (
     <div className="Home container">
-      <p className="Home-welcome">
-        Welcome to <strong>Microblog</strong>, our innovative site for communication on the information superhighway
-      </p>
-      <div className="row">
-        {sortedPostVote.map(postKey => <BlogpostCard 
-        key={postKey}
-          id={postKey}
-          title={posts[postKey].title}
-          tags={posts[postKey].tags}
-          description={posts[postKey].description}
-          />)}
+
+      <div className="container">
+        {sortedPostVote.map(postKey => 
+          <div className="justify-content-between Home-element" key={postKey}>
+            <h5>
+              <Link to={`posts/${postKey}`}>{posts[postKey].title.toUpperCase()}</Link>
+              <hr></hr>         
+            </h5>
+            <p>{posts[postKey].description}
+            <img src={getImgSrc(posts[postKey].body) || ""} style={{float: 'right', height: 100}}></img>
+            </p>
+            <small> Created at {moment(posts[postKey].created_at).format('LLLL')}</small>
+            <Vote postId={postKey}/>
+          </div>
+          )}
       </div>
     </div>
   )

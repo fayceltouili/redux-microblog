@@ -38,10 +38,9 @@ const EditCommentForm = props => {
           >Save
           </Button>
         </Col>     
-    </Form>
-  </div>
-)
+      </Form>
+    </div>
+  )
 }
 
 export default EditCommentForm;
-

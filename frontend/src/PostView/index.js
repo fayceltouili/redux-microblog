@@ -7,11 +7,10 @@ import {
   CardText,
   CardFooter
 } from 'reactstrap';
-import Vote from './Vote'
+import Vote from '../Vote'
 
 
 const BlogpostCard = props => {
-
 
   const { title, description, id } = props
 
@@ -24,7 +23,7 @@ const BlogpostCard = props => {
         <CardBody>
           <CardText>{description}</CardText>
         </CardBody>
-      <CardFooter > <Vote postId={id}/></CardFooter>
+        <CardFooter > <Vote postId={id}/></CardFooter>
       </Card>
     </div>
   )
