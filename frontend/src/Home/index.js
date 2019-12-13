@@ -28,7 +28,7 @@ console.log(posts)
               <Link to={`posts/${postKey}`}>{posts[postKey].title.toUpperCase()}</Link>
               <hr></hr>         
             </h5>
-            <p>{posts[postKey].description}
+            <p>{posts[postKey].description} <Link to={`posts/${postKey}`}>continue reading ..</Link>
             <img src={getImgSrc(posts[postKey].body) || ""} style={{float: 'right', height: 100}}></img>
             </p>
             <small> Created at {moment(posts[postKey].created_at).format('LLLL')}</small>

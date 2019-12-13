@@ -10,13 +10,11 @@ const Routes = () => {
     <Switch>
       <Route exact path="/" render={() => <Home />}/>
       <Route exact path="/new" render={() => <MyEditor />} />
-
       <Route exact path="/posts/:id" render={routerProps =>
         <PostDetails {...routerProps} /> }/>	
       <Redirect to="/" />
     </Switch>
   );
 }
-
 
 export default Routes;

@@ -14,7 +14,7 @@ import{
   from "./Constants";
 
 
-const BASE_URL= process.env.REACT_APP_BASE_URL || 'https://microblogalog-backend.herokuapp.com/';
+const BASE_URL= process.env.REACT_APP_BASE_URL || 'http://localhost:5000';
 
 const  errorInAPI = errors => {
   return {
